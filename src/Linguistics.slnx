@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="Linguistics/Linguistics.csproj">
-  </Project>
+  <Project Path="Linguistics.Tests/Linguistics.Tests.csproj" />
+  <Project Path="Linguistics/Linguistics.csproj" />
 </Solution>
