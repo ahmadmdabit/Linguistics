@@ -7,7 +7,7 @@
 
 **Linguistics** is a specialized .NET library for Arabic text processing, morphology analysis, and root extraction. Engineered for high-throughput scenarios (search engines, indexing pipelines) where allocation and CPU cycles are critical.
 
-> 📖 **Full API reference and architecture deep-dive: [MANUAL.md](src/Linguistics/MANUAL.md)**
+> 📖 **Full API reference and architecture deep-dive: [MANUAL.md](MANUAL.md)**
 
 ---
 
