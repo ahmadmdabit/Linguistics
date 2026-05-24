@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        framework: [net6.0, net7.0, net8.0, net9.0, net10.0]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+            9.0.x
+            8.0.x
+            7.0.x
+            6.0.x
+
+      - name: Restore
+        run: dotnet restore src/Linguistics.slnx
+
+      - name: Build (${{ matrix.framework }})
+        run: dotnet build src/Linguistics/Linguistics.csproj --configuration Release --framework ${{ matrix.framework }} --no-restore
+
+      - name: Vulnerability scan
+        run: dotnet list src/Linguistics/Linguistics.csproj package --vulnerable --include-transitive
+
+      - name: Pack (dry run, no push)
+        run: dotnet pack src/Linguistics/Linguistics.csproj --configuration Release --output ./artifacts --no-build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Linguistics-${{ matrix.framework }}
+          path: ./artifacts/
+          retention-days: 1

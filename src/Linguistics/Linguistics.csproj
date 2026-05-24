@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Linguistics</PackageId>
+		<Authors>Ahmet Fatihoglu</Authors>
+		<MinVerDefaultPreReleaseIdentifiers>preview.0</MinVerDefaultPreReleaseIdentifiers>
+		<MinVerMinimumMajorMinor>1.0</MinVerMinimumMajorMinor>
+		<MinVerTagPrefix>v</MinVerTagPrefix>
+		<Description>A specialized .NET library for Arabic text processing, morphology analysis, and root extraction. It is engineered for high-throughput scenarios (search engines, indexing pipelines) where memory allocation and CPU cycles are critical.</Description>
+		<PackageProjectUrl>https://github.com/ahmadmdabit/Linguistics</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/ahmadmdabit/Linguistics</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>arabic;nlp;morphology;stemming;root-extraction;diacritics;text-processing</PackageTags>
+		<Title>Linguistics</Title>
+		<Copyright>Copyright (c) Ahmet Fatihoglu 2026</Copyright>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+		<PackageReference Include="MinVer" Version="7.0.0" PrivateAssets="All" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="True" PackagePath="\README.md" Link="README.md" />
+		<None Include="..\..\LICENSE" Pack="True" PackagePath="\LICENSE" Link="LICENSE" />
+	</ItemGroup>
+
+</Project>
