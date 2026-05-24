@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write   # Required for NuGet Trusted Publishing (OIDC)
+  id-token: write   # Required for NuGet Trusted Publishing (OIDC) - NuGet/login@v1 OIDC token exchange
 
 jobs:
   publish:
@@ -28,7 +28,14 @@ jobs:
             8.0.x
             7.0.x
             6.0.x
-
+            
+      - name: Get version from latest tag
+        id: version
+        run: |
+          TAG=$(git describe --tags --abbrev=0)
+          VERSION=${TAG#v}   # strips the leading 'v' prefix if present
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          
       - name: Restore
         run: dotnet restore src/Linguistics.slnx
 
@@ -36,7 +43,7 @@ jobs:
         run: dotnet build src/Linguistics/Linguistics.csproj --configuration Release --no-restore
 
       - name: Pack
-        run: dotnet pack src/Linguistics/Linguistics.csproj --configuration Release --output ./artifacts --no-build
+        run: dotnet pack src/Linguistics/Linguistics.csproj --configuration Release --output ./artifacts /p:MinVerVersionOverride=${{ steps.version.outputs.VERSION }} --no-build
 
       - name: NuGet login (OIDC → temp API key)
         uses: NuGet/login@v1
@@ -46,11 +53,9 @@ jobs:
 
       - name: Push to NuGet.org (Trusted Publishing)
         run: |
-          dotnet nuget push ./artifacts/*.nupkg \
-            --api-key ${{ steps.login.outputs.NUGET_API_KEY }} \
-            --source https://api.nuget.org/v3/index.json \
-            --skip-duplicate
-          dotnet nuget push ./artifacts/*.snupkg \
-            --api-key ${{ steps.login.outputs.NUGET_API_KEY }} \
-            --source https://api.nuget.org/v3/index.json \
-            --skip-duplicate
+          for pkg in ./artifacts/*.nupkg ./artifacts/*.snupkg; do
+            dotnet nuget push "$pkg" \
+              --api-key ${{ steps.login.outputs.NUGET_API_KEY }} \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done

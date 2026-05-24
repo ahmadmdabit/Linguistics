@@ -1,5 +1,9 @@
 name: CI
 
+# Least-privilege: CI only reads the repo — no write access needed
+permissions:
+  contents: read
+
 on:
   push:
     branches: [master]
@@ -9,10 +13,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        framework: [net6.0, net7.0, net8.0, net9.0, net10.0]
-      fail-fast: false
 
     steps:
       - uses: actions/checkout@v4
@@ -32,18 +32,28 @@ jobs:
       - name: Restore
         run: dotnet restore src/Linguistics.slnx
 
-      - name: Build (${{ matrix.framework }})
-        run: dotnet build src/Linguistics/Linguistics.csproj --configuration Release --framework ${{ matrix.framework }} --no-restore
+      - name: Build (all frameworks)
+        run: dotnet build src/Linguistics/Linguistics.csproj --configuration Release --no-restore
 
       - name: Vulnerability scan
         run: dotnet list src/Linguistics/Linguistics.csproj package --vulnerable --include-transitive
 
-      - name: Pack (dry run, no push)
-        run: dotnet pack src/Linguistics/Linguistics.csproj --configuration Release --output ./artifacts --no-build
+      # Resolve version dynamically from the last pushed tag (e.g. v1.0.0 → 1.0.0)
+      # This ensures CI-only commits (no new tag) still produce a correctly versioned artifact
+      - name: Resolve version from latest tag
+        id: version
+        run: |
+          TAG=$(git describe --tags --abbrev=0)
+          VERSION=${TAG#v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Pack
+        run: dotnet pack src/Linguistics/Linguistics.csproj --configuration Release --output ./artifacts --no-build /p:MinVerVersionOverride=${{ steps.version.outputs.VERSION }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Linguistics-${{ matrix.framework }}
+          name: Linguistics-packages
           path: ./artifacts/
-          retention-days: 1
+          # 7 is a safe minimum, to debug failed publish jobs
+          retention-days: 7
