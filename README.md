@@ -1,7 +1,7 @@
 # Linguistics: High-Performance Arabic NLP Library
 
 [![NuGet](https://img.shields.io/nuget/v/Linguistics)](https://nuget.org/packages/Linguistics)
-[![CI](https://github.com/ahmadmdabit/Linguistics/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmadmdabit/Linguistics/actions/workflows/ci.yml)
+[![CI](https://github.com/ahmadmdabit/Linguistics/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ahmadmdabit/Linguistics/actions/workflows/ci.yml)
 [![.NET](https://img.shields.io/badge/.NET-6.0_|_7.0_|_8.0_|_9.0_|_10.0-purple)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
