@@ -217,7 +217,7 @@ Test summary: total: 191, failed: 0, succeeded: 191, skipped: 0, duration: 5s
 
 **Bonus:**
 
-Install (DotCov)[https://github.com/ANcpLua/dotcov] which is a toolkit streams Cobertura XML coverage — zero-dependency parser and dotnet global tool. Handles 50 MB+ reports without loading the DOM.
+Install [DotCov](https://github.com/ANcpLua/dotcov) which is a toolkit streams Cobertura XML coverage — zero-dependency parser and dotnet global tool. Handles 50 MB+ reports without loading the DOM.
 
 ```bash
 dotnet tool install -g DotCov.Tool
